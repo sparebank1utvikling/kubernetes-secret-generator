@@ -1,6 +1,7 @@
 package secret
 
 import (
+	"bytes"
 	"crypto/rand"
 	"encoding/base32"
 	"encoding/base64"
@@ -51,6 +52,14 @@ func (pg StringGenerator) generateRandomSecret(conf secretConfig) error {
 	if err != nil {
 		return err
 	}
+	const templateKey = "${SECRET}"
+	template, err := getTemplateFromAnnotation(templateKey, instance.Annotations)
+	if err != nil {
+		return err
+	}
+
+	value = bytes.ReplaceAll([]byte(template), []byte(templateKey), value)
+
 	instance.Data[key] = value
 
 	pg.log.Info("set field of instance to new randomly generated instance", "bytes", len(value), "field", key, "encoding", encoding)

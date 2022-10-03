@@ -178,3 +178,10 @@ func getEncodingFromAnnotation(fallback string, annotations map[string]string) (
 	}
 	return fallback, nil
 }
+
+func getTemplateFromAnnotation(fallback string, annotations map[string]string) (string, error) {
+	if val, ok := annotations[AnnotationSecretTemplate]; ok {
+		return val, nil
+	}
+	return fallback, nil
+}
