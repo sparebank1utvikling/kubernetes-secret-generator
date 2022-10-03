@@ -12,7 +12,7 @@ on:
 env:
   KUBECONFIG: /tmp/kubeconfig
   OPERATOR_SDK_VERSION: v0.18.2
-  IMAGE_NAME: quay.io/mittwald/kubernetes-secret-generator
+  IMAGE_NAME: ${{ github.repository }}
 
 jobs:
   test:
