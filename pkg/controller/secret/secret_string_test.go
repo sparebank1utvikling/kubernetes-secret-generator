@@ -384,6 +384,30 @@ func TestDefaultToStringGeneration(t *testing.T) {
 	verifyStringSecret(t, in, out, true)
 }
 
+func TestTemplateFromAnnotation(t *testing.T) {
+	in := newStringTestSecret("testfield", map[string]string{
+		secret.AnnotationSecretType:     string(secret.TypeString),
+		secret.AnnotationSecretTemplate: `{"username": "user", "password": "${SECRET}"}`,
+	}, "")
+	require.NoError(t, mgr.GetClient().Create(context.TODO(), in))
+
+	doReconcile(t, in, false)
+
+	out := &corev1.Secret{}
+	require.NoError(t, mgr.GetClient().Get(context.TODO(), types.NamespacedName{
+		Name:      in.Name,
+		Namespace: in.Namespace}, out))
+	const prefix = `{"username": "user", "password": "`
+	const suffix = `"}`
+	if !bytes.HasPrefix(out.Data["testfield"], []byte(prefix)) || bytes.HasSuffix(out.Data["testfield"], []byte(suffix)) {
+		t.Errorf("Generated secret did not match template prefix/suffix: %s", string(out.Data["testfield"]))
+	}
+
+	secret := bytes.TrimSuffix(bytes.TrimPrefix(out.Data["testfield"], []byte(prefix)), []byte(suffix))
+
+	t.Log(string(secret))
+}
+
 func TestStringTypeAnnotationDetected(t *testing.T) {
 	in := newStringTestSecret("testfield", map[string]string{
 		secret.AnnotationSecretType: string(secret.TypeString),
