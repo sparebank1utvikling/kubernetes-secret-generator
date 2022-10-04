@@ -39,7 +39,7 @@ jobs:
 
       - name: Hack Code Climate and Go Modules
         if: github.event_name != 'pull_request'
-        run: mkdir -p github.com/mittwald && ln -sf $(pwd) github.com/mittwald/kubernetes-secret-generator
+        run: mkdir -p github.com/sparebank1utvikling/ && ln -sf $(pwd) github.com/sparebank1utvikling/kubernetes-secret-generator
 
       - name: Test & publish code coverage
         if: github.event_name != 'pull_request'
@@ -132,7 +132,7 @@ jobs:
         run: docker push "$IMAGE_NAME:latest" && docker push "$IMAGE_NAME:${GITHUB_REF##*/}"
 
       - name: Run chart version bump
-        uses: mittwald/bump-app-version-action@v1
+        uses: sparebank1utvikling/bump-app-version-action@v1
         with:
           mode: 'publish'
           chartYaml: './deploy/helm-chart/kubernetes-secret-generator/Chart.yaml'
