@@ -41,15 +41,15 @@ jobs:
         if: github.event_name != 'pull_request'
         run: mkdir -p github.com/sparebank1utvikling/ && ln -sf $(pwd) github.com/sparebank1utvikling/kubernetes-secret-generator
 
-      - name: Test & publish code coverage
-        if: github.event_name != 'pull_request'
-        uses: paambaati/codeclimate-action@v2.3.0
-        env:
-          CC_TEST_REPORTER_ID: ${{ secrets.codeClimateReporterID }}
-        with:
-          coverageCommand: go test -coverprofile=c.out ./...
-          debug: true
-          prefix: 'github.com/${{ github.repository }}/'
+      # - name: Test & publish code coverage
+      #   if: github.event_name != 'pull_request'
+      #   uses: paambaati/codeclimate-action@v2.3.0
+      #   env:
+      #     CC_TEST_REPORTER_ID: ${{ secrets.codeClimateReporterID }}
+      #   with:
+      #     coverageCommand: go test -coverprofile=c.out ./...
+      #     debug: true
+      #     prefix: 'github.com/${{ github.repository }}/'
 
       - name: Go Test
         if: github.event_name == 'pull_request'
