@@ -399,7 +399,7 @@ func TestTemplateFromAnnotation(t *testing.T) {
 		Namespace: in.Namespace}, out))
 	const prefix = `{"username": "user", "password": "`
 	const suffix = `"}`
-	if !bytes.HasPrefix(out.Data["testfield"], []byte(prefix)) || bytes.HasSuffix(out.Data["testfield"], []byte(suffix)) {
+	if !bytes.HasPrefix(out.Data["testfield"], []byte(prefix)) || !bytes.HasSuffix(out.Data["testfield"], []byte(suffix)) {
 		t.Errorf("Generated secret did not match template prefix/suffix: %s", string(out.Data["testfield"]))
 	}
 
